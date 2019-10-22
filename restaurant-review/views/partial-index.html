@@ -1,0 +1,15 @@
+<ul>
+    ${restaurantInfo.map(restaurant => `
+    <li>
+        <strong>
+            <a href=/${restaurant.id}>${restaurant.name}</a>
+        </strong> ${restaurant.street}
+
+        ${restaurant.city} ${restaurant.state} ${restaurant.zipcode}
+
+        <a href=/${restaurant.id}>
+            <img class="small" src="${restaurant.picture}" />
+        </a>
+    </li>
+    `).join('')}
+</ul>
