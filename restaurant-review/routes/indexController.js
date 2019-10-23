@@ -8,7 +8,9 @@ router.get("/", async (req, res, next) => {
     res.render("template", {
         locals: {
             title: "Index Page",
-            restaurantInfo: restaurantAllData
+            restaurantInfo: restaurantAllData,
+            isLoggedIn: req.session.is_logged_in,
+            userName: req.session.first_name
         },
         partials: {
             partial: "partial-index"
