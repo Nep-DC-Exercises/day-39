@@ -5,10 +5,13 @@ const express = require("express"),
     logger = require("morgan"),
     session = require("express-session"),
     FileStore = require("session-file-store")(session);
-
-const indexController = require("./routes/indexController"),
+    
+    const indexController = require("./routes/indexController"),
     usersController = require("./routes/usersController");
 
+require("dotenv").config();
+console.log("process env", process.env);
+    
 const app = express();
 
 app.engine("html", es6Renderer);

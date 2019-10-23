@@ -6,6 +6,7 @@ const express = require("express"),
 // My Models
 const UserModel = require("../models/userModel");
 
+// GET Routes
 router.get("/login", async (req, res, next) => {
     res.render("template", {
         locals: {
@@ -30,6 +31,12 @@ router.get("/signup", async (req, res, next) => {
     });
 });
 
+router.get("/logout", (req, res, next) => {
+    req.session.destroy();
+    res.status(200).redirect("/users/login")
+})
+
+// POST Routes
 router.post("/signup", async (req, res, next) => {
     // Ignoring deconstructing the password for now. Able to deconstruct b/c req.body is a js object
     const { first_name, last_name, email_address } = req.body;
