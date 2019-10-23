@@ -2,7 +2,9 @@ const express = require("express"),
     es6Renderer = require("express-es6-template-engine"),
     path = require("path"),
     cookieParser = require("cookie-parser"),
-    logger = require("morgan");
+    logger = require("morgan"),
+    session = require("express-session"),
+    FileStore = require("session-file-store")(session);
 
 const indexController = require("./routes/indexController"),
     usersController = require("./routes/usersController");
@@ -18,6 +20,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    session({
+        store: new FileStore(),
+        secret: "burrito",
+        resave: false,
+        saveUninitialized: true,
+        is_logged_in: false
+    })
+);
 
 app.use("/", indexController);
 app.use("/users", usersController);
