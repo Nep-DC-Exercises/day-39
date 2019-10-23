@@ -17,7 +17,21 @@ class User {
     }
 
     async save() {
-        console.log("This is the save method", this.email_address);
+        try {
+            const response = await db.one(
+                `INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING id;`,
+                [
+                    this.first_name,
+                    this.last_name,
+                    this.email_address,
+                    this.password
+                ]
+            );
+
+            return response
+        } catch (err) {
+            return err.message;
+        }
     }
 }
 
