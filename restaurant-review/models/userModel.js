@@ -1,4 +1,5 @@
-const db = require("./conn");
+const db = require("./conn"),
+    bcrypt = require("bcryptjs");
 
 class User {
     constructor(first_name, last_name, email_address, password) {
@@ -8,9 +9,24 @@ class User {
         this.password = password;
     }
 
+    checkPassword(hashedPassword) {
+        return bcrypt.compareSync(this.password, hashedPassword);
+    }
+
     async login() {
         try {
-            console.log("This is the login method", this.email_address);
+            const response = await db.one(
+                `SELECT * FROM users WHERE email = $1;`,
+                [this.email_address]
+            );
+            const isValid = this.checkPassword(response.password);
+            // ! = Not True   !! = forces to a boolean
+            if (!!isValid) {
+                const { id, first_name, last_name } = response;
+                return { isValid, id, first_name, last_name };
+            } else {
+                return { isValid };
+            }
         } catch (err) {
             return err.message;
         }
@@ -28,7 +44,7 @@ class User {
                 ]
             );
 
-            return response
+            return response;
         } catch (err) {
             return err.message;
         }

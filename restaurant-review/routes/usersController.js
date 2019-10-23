@@ -46,13 +46,22 @@ router.post("/signup", async (req, res, next) => {
         // redirect doesn't care about the current route so we are in which is why we specify /users/login
         res.status(200).redirect("/users/login");
     } else {
-        res.status(500)
+        res.status(500);
     }
 });
 
 router.post("/login", async (req, res, next) => {
-    console.log(req.body);
-    res.status(200).redirect("/");
+    const { email_address, password } = req.body;
+
+    const user = new UserModel(null, null, email_address, password);
+
+    const response = await user.login();
+    
+    if (!!response.isValid) {
+        res.status(200).redirect("/");
+    } else {
+        res.sendStatus(401);
+    }
 });
 
 module.exports = router;
